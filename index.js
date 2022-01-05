@@ -1,0 +1,34 @@
+const dotenv = require('dotenv')
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+app.use(bodyParser.json())
+var multer = require('multer');
+var upload = multer();
+// for parsing multipart/form-data
+app.use(upload.array()); 
+app.use(express.static('public'));
+
+app.use(bodyParser.json({}));//this line is required to tell your app to parse the body as json
+app.use(bodyParser.urlencoded({ extended: false }));
+// init env file
+dotenv.config()
+
+
+
+
+
+const huxhRoutes = require('./routes/huxhRoutes')   
+// route middlewares for admin
+app.use('/api/v1/huxh-deal', huxhRoutes)
+
+app.get("/", (req, res) => {
+    res.send(
+        "<h2>Backend Is Running</h2>"
+    )
+})
+
+app.listen(process.env.PORT || 3000, async () => {
+    console.log('🚀 app running on port', process.env.PORT || 3000)
+    // await init()
+})
