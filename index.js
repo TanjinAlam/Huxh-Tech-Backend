@@ -24,7 +24,7 @@ app.use('/api/v1/huxh-deal', huxhRoutes)
 
 app.get("/", (req, res) => {
     res.send(
-        "<h2>Backend Is Running</h2>"
+        "<h2>Huxh-Tech-Deal Backend Is Running</h2>"
     )
 })
 
