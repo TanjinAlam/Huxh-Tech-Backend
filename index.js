@@ -1,34 +1,39 @@
-const dotenv = require('dotenv')
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-app.use(bodyParser.json())
-var multer = require('multer');
-var upload = multer();
-// for parsing multipart/form-data
-app.use(upload.array()); 
-app.use(express.static('public'));
+const dotenv = require("dotenv");
+const express = require("express");
+const bodyParser = require("body-parser");
 
-app.use(bodyParser.json({}));//this line is required to tell your app to parse the body as json
+const app = express();
+app.use(bodyParser.json());
+// for parsing multipart/form-data
+var multer = require("multer");
+var upload = multer();
+
+app.use(upload.array());
+app.use(express.static("public"));
+const cors = require("cors");
+app.use(bodyParser.json({})); //this line is required to tell your app to parse the body as json
 app.use(bodyParser.urlencoded({ extended: false }));
 // init env file
-dotenv.config()
+dotenv.config();
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 
-
-
-
-const huxhRoutes = require('./routes/huxhRoutes')   
+const huxhRoutes = require("./routes/huxhRoutes");
 // route middlewares for admin
-app.use('/api/v1/huxh-deal', huxhRoutes)
+app.use("/api/v1/huxh-deal", huxhRoutes);
 
 app.get("/", (req, res) => {
-    res.send(
-        "<h2>Huxh-Tech-Deal Backend Is Running</h2>"
-    )
-})
+  res.send("<h2>Huxh-Tech-Deal Backend Is Running</h2>");
+});
 
 app.listen(process.env.PORT || 3000, async () => {
-    console.log('🚀 app running on port', process.env.PORT || 3000)
-    // await init()
-})
+  console.log("🚀 app running on port", process.env.PORT || 3000);
+  // await init()
+});

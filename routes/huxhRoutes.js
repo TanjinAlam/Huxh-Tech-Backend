@@ -27,6 +27,17 @@ router.post('/deployContract', electionController.deployContract);
 router.post('/signUp', userController.signUp);
 router.post('/login', userController.login);
 
+/**
+ * load controllers
+ *
+ * @type {controller} list of all Controller
+ */
+ const productController = require('../controller/productController'); 
+
+
+router.post('/insertProduct', productController.insertProduct);
+router.post('/productList', productController.productList);
+
 
 
 router.get('/test', (req, res) => {
