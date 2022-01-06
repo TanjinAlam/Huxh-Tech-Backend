@@ -76,8 +76,8 @@ const signUp = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  console.log("req", req.body.values);
-  let { email, password } = req.body.values;
+  console.log("req", req.body);
+  let { email, password } = req.body;
 
   const numberCheckingQry = `SELECT * FROM buy_user_info WHERE email LIKE '${email}';`;
   conn.query(numberCheckingQry, (err, result) => {
