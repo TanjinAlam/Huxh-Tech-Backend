@@ -37,11 +37,49 @@ const insertProduct = async (req, res, next) => {
   });
 };
 
+const orderRequest = async (req, res, next) => {
+  let { userId, productId } = req.body;
+  let query =
+    "INSERT INTO product_order_details (id,userId, productId, createdAt) VALUES (?);";
+  let data = [null, userId, productId, new Date()];
+  conn.query(query, [data], (err, result, fields) => {
+    if (err) {
+      return res.status(200).json({
+        msg: TextString.Order_Request_Failed,
+        status: responseStatus.STATUS_BAD_REQUEST,
+      });
+    } else {
+      let productUpdateQuery = `UPDATE seller_product SET status ="${1}" WHERE id = '${productId}'`;
+      conn.query(productUpdateQuery, async (err, result) => {
+        if (err) {
+          return res.status(200).send({
+            msg: TextString.Order_Request_Failed,
+            status: responseStatus.STATUS_BAD_GATEWAY,
+          });
+        } else {
+          return res.status(200).send({
+            message: TextString.Order_Request_Success,
+            status: responseStatus.STATUS_OK,
+          });
+        }
+      });
+    }
+  
+  });
+};
+
 const productList = async (req, res, next) => {
   console.log("req", req.body);
   let { userId } = req.body;
 
-  const numberCheckingQry = `SELECT * FROM seller_product WHERE userId LIKE '${userId}';`;
+  const numberCheckingQry = `SELECT seller_product.* ,  buy_user_info.* , deplyed_product.*
+  FROM seller_product
+  JOIN buy_user_info
+  ON seller_product.userId = buy_user_info.id
+  JOIN deplyed_product
+  ON seller_product.userId = deplyed_product.userId
+  WHERE seller_product.userId = '${userId}'`;
+
   conn.query(numberCheckingQry, (err, result) => {
     console.log("result", result);
     if (err) {
@@ -55,7 +93,39 @@ const productList = async (req, res, next) => {
     } else {
       return res.status(200).json({
         msg: TextString.Data_Insert_Success,
-        data : result,
+        data: result,
+        statis: responseStatus.STATUS_OK,
+      });
+    }
+  });
+};
+
+const orderList = async (req, res, next) => {
+  console.log("req", req.body);
+  let { userId } = req.body;
+
+  const numberCheckingQry = `SELECT product_order_details.* ,  buy_user_info.* , seller_product.*
+  FROM product_order_details
+  JOIN buy_user_info
+  ON product_order_details.userId = buy_user_info.id
+  JOIN seller_product
+  ON product_order_details.productId = seller_product.id
+  WHERE product_order_details.userId = '${userId}'`;
+
+  conn.query(numberCheckingQry, (err, result) => {
+    console.log("result", result);
+    if (err) {
+      return res.status(200).json({
+        msg: TextString.Data_Insert_Failed,
+        statis: responseStatus.STATUS_BAD_REQUEST,
+      });
+    }
+
+    if (result.length < 1) {
+    } else {
+      return res.status(200).json({
+        msg: TextString.Data_Insert_Success,
+        data: result,
         statis: responseStatus.STATUS_OK,
       });
     }
@@ -65,4 +135,6 @@ const productList = async (req, res, next) => {
 module.exports = {
   insertProduct,
   productList,
+  orderRequest,
+  orderList,
 };

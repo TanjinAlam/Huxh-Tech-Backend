@@ -37,6 +37,8 @@ router.post('/login', userController.login);
 
 router.post('/insertProduct', productController.insertProduct);
 router.post('/productList', productController.productList);
+router.post('/orderRequest', productController.orderRequest);
+router.post('/orderList', productController.orderList);
 
 
 

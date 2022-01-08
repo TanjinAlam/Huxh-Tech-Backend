@@ -25,14 +25,14 @@ const signUp = async (req, res, next) => {
     if (err) {
       return res.status(501).json({
         msg: "Number checking error",
-        error: err.message,
+        status : responseStatus.STATUS_BAD_GATEWAY
       });
     }
 
     if (result.length) {
       return res.status(200).json({
         msg: "User already exist",
-        error: "This number already exist",
+        status : responseStatus.CONFLECT_ERROR
       });
     }
 
@@ -60,7 +60,7 @@ const signUp = async (req, res, next) => {
         if (err) {
           return res.status(501).json({
             msg: "User info fail to insert in database",
-            error: err.message,
+            status : responseStatus.STATUS_BAD_GATEWAY
           });
         }
 
@@ -68,6 +68,7 @@ const signUp = async (req, res, next) => {
           msg: "Registration success",
           data: {
             user_id: result.insertId,
+            status : responseStatus.STATUS_OK
           },
         });
       });
@@ -85,14 +86,14 @@ const login = async (req, res, next) => {
     if (err) {
       return res.status(501).json({
         msg: "Number checking error",
-        error: err.message,
+        status : responseStatus.STATUS_BAD_GATEWAY
       });
     }
 
     if (result.length < 1) {
       return res.status(404).json({
         msg: "User not found",
-        error: "User not found",
+        status : responseStatus.STATUS_NOT_FOUND
       });
     } else {
       const user = result[0];
@@ -103,13 +104,13 @@ const login = async (req, res, next) => {
           return res.status(200).json({
             msg: "Login success",
             data: user,
-            status: 200,
+            status : responseStatus.STATUS_OK
           });
         } else {
           return res.status(200).send({
-            msg: "Login Failed",
+            msg: "Incorrect Passowrd",
             data: null,
-            status: 401,
+            status : responseStatus.STATUS_UNAUTHORIZED
           });
         }
       });

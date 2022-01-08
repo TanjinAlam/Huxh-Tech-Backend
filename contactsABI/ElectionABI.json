@@ -225,6 +225,20 @@
 		"constant": false,
 		"inputs": [
 			{
+				"name": "_buyer",
+				"type": "address"
+			}
+		],
+		"name": "updateBuyer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"name": "orderno",
 				"type": "uint256"
 			}
@@ -236,16 +250,7 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"name": "_buyerAddr",
-				"type": "address"
-			},
-			{
-				"name": "_owner",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"payable": true,
 		"stateMutability": "payable",
 		"type": "constructor"
