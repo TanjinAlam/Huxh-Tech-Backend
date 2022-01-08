@@ -29,6 +29,7 @@
     "fortmatic": "^2.2.1",
     "ganache-cli": "^6.12.2",
     "litecore-lib": "^0.13.22",
+    "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",

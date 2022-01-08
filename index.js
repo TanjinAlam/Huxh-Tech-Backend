@@ -1,8 +1,11 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const bodyParser = require("body-parser");
+const morgan = require('morgan');
 
 const app = express();
+
+app.use(morgan('URL :url Method :method StatusCode :status'))
 app.use(bodyParser.json());
 // for parsing multipart/form-data
 var multer = require("multer");

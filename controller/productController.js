@@ -28,12 +28,12 @@ const insertProduct = async (req, res, next) => {
         msg: TextString.Data_Insert_Failed,
         status: responseStatus.STATUS_BAD_REQUEST,
       });
+    } else {
+      return res.status(200).json({
+        msg: TextString.Data_Insert_Success,
+        status: responseStatus.STATUS_OK,
+      });
     }
-
-    return res.status(200).json({
-      msg: TextString.Data_Insert_Success,
-      status: responseStatus.STATUS_OK,
-    });
   });
 };
 
@@ -64,7 +64,6 @@ const orderRequest = async (req, res, next) => {
         }
       });
     }
-  
   });
 };
 
@@ -84,15 +83,18 @@ const productList = async (req, res, next) => {
     console.log("result", result);
     if (err) {
       return res.status(200).json({
-        msg: TextString.Data_Insert_Failed,
+        msg: TextString.Data_Not_Found,
         statis: responseStatus.STATUS_BAD_REQUEST,
       });
-    }
-
-    if (result.length < 1) {
+    } else if (result.length < 1) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        data: result,
+        statis: responseStatus.STATUS_NOT_FOUND,
+      });
     } else {
       return res.status(200).json({
-        msg: TextString.Data_Insert_Success,
+        msg: TextString.Data_Found,
         data: result,
         statis: responseStatus.STATUS_OK,
       });
