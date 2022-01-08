@@ -71,6 +71,39 @@ const productList = async (req, res, next) => {
   console.log("req", req.body);
   let { userId } = req.body;
 
+  const numberCheckingQry = `SELECT seller_product.* ,  buy_user_info.* 
+  FROM seller_product
+  JOIN buy_user_info
+  ON seller_product.userId = buy_user_info.id
+  WHERE seller_product.userId = '${userId}'`;
+
+  conn.query(numberCheckingQry, (err, result) => {
+    console.log("result", result);
+    if (err) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        statis: responseStatus.STATUS_BAD_REQUEST,
+      });
+    } else if (result.length < 1) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        data: result,
+        statis: responseStatus.STATUS_NOT_FOUND,
+      });
+    } else {
+      return res.status(200).json({
+        msg: TextString.Data_Found,
+        data: result,
+        statis: responseStatus.STATUS_OK,
+      });
+    }
+  });
+};
+
+const deployedProductList = async (req, res, next) => {
+  console.log("req", req.body);
+  let { userId } = req.body;
+
   const numberCheckingQry = `SELECT seller_product.* ,  buy_user_info.* , deplyed_product.*
   FROM seller_product
   JOIN buy_user_info
