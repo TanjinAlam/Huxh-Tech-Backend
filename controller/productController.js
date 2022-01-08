@@ -71,10 +71,8 @@ const productList = async (req, res, next) => {
   console.log("req", req.body);
   let { userId } = req.body;
 
-  const numberCheckingQry = `SELECT seller_product.* ,  buy_user_info.* 
+  const numberCheckingQry = `SELECT seller_product.* 
   FROM seller_product
-  JOIN buy_user_info
-  ON seller_product.userId = buy_user_info.id
   WHERE seller_product.userId = '${userId}' AND seller_product.status = '${0}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
@@ -103,12 +101,8 @@ const deployedProductList = async (req, res, next) => {
   console.log("req", req.body);
   let { userId } = req.body;
 
-  const numberCheckingQry = `SELECT seller_product.* ,  buy_user_info.* , deplyed_product.*
+  const numberCheckingQry = `SELECT seller_product.* 
   FROM seller_product
-  JOIN buy_user_info
-  ON seller_product.userId = buy_user_info.id
-  JOIN deplyed_product
-  ON seller_product.userId = deplyed_product.userId
   WHERE seller_product.userId = '${userId}' AND seller_product.status = '${1}'`;
 
   conn.query(numberCheckingQry, (err, result) => {

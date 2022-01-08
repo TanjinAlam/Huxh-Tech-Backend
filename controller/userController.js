@@ -122,10 +122,11 @@ const login = async (req, res, next) => {
 const availableProduct = async (req, res, next) => {
   console.log("req", req.body);
 
-  const numberCheckingQry = `SELECT seller_product.* , deplyed_product.*
+  const numberCheckingQry = `SELECT seller_product.* , deplyed_product.contractAddress
   FROM seller_product
   JOIN deplyed_product
-  ON seller_product.id = deplyed_product.productId`;
+  ON seller_product.id = deplyed_product.productId
+  WHERE seller_product.status = '${1}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
     if (err) {
