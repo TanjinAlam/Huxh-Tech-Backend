@@ -117,7 +117,39 @@ const login = async (req, res, next) => {
     }
   });
 };
+
+
+const availableProduct = async (req, res, next) => {
+  console.log("req", req.body);
+
+  const numberCheckingQry = `SELECT seller_product.* , deplyed_product.*
+  FROM seller_product
+  JOIN deplyed_product
+  ON seller_product.id = deplyed_product.productId`;
+
+  conn.query(numberCheckingQry, (err, result) => {
+    if (err) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        statis: responseStatus.STATUS_BAD_REQUEST,
+      });
+    } else if (result.length < 1) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        data: result,
+        statis: responseStatus.STATUS_NOT_FOUND,
+      });
+    } else {
+      return res.status(200).json({
+        msg: TextString.Data_Found,
+        data: result,
+        statis: responseStatus.STATUS_OK,
+      });
+    }
+  });
+};
 module.exports = {
   signUp,
   login,
+  availableProduct
 };

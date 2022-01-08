@@ -49,7 +49,7 @@ const orderRequest = async (req, res, next) => {
         status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else {
-      let productUpdateQuery = `UPDATE seller_product SET status ="${1}" WHERE id = '${productId}'`;
+      let productUpdateQuery = `UPDATE seller_product SET status ="${2}" WHERE id = '${productId}'`;
       conn.query(productUpdateQuery, async (err, result) => {
         if (err) {
           return res.status(200).send({
@@ -75,10 +75,9 @@ const productList = async (req, res, next) => {
   FROM seller_product
   JOIN buy_user_info
   ON seller_product.userId = buy_user_info.id
-  WHERE seller_product.userId = '${userId}'`;
+  WHERE seller_product.userId = '${userId}' AND seller_product.status = '${0}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
-    console.log("result", result);
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
@@ -110,10 +109,9 @@ const deployedProductList = async (req, res, next) => {
   ON seller_product.userId = buy_user_info.id
   JOIN deplyed_product
   ON seller_product.userId = deplyed_product.userId
-  WHERE seller_product.userId = '${userId}'`;
+  WHERE seller_product.userId = '${userId}' AND seller_product.status = '${1}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
-    console.log("result", result);
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
@@ -172,4 +170,5 @@ module.exports = {
   productList,
   orderRequest,
   orderList,
+  deployedProductList
 };

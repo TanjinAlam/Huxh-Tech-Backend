@@ -249,7 +249,7 @@ const deployContract = async (req, res, next) => {
                 });
               } else {
                 return res.status(200).send({
-                  message: TextString.Deployed_Successful,
+                  msg: TextString.Deployed_Successful,
                   data: result,
                   status: responseStatus.STATUS_OK,
                 });

@@ -26,6 +26,7 @@ router.post('/deployContract', electionController.deployContract);
 
 router.post('/signUp', userController.signUp);
 router.post('/login', userController.login);
+router.post('/availableProduct', userController.availableProduct);
 
 /**
  * load controllers
@@ -37,6 +38,7 @@ router.post('/login', userController.login);
 
 router.post('/insertProduct', productController.insertProduct);
 router.post('/productList', productController.productList);
+router.post('/deployedProductList', productController.deployedProductList);
 router.post('/orderRequest', productController.orderRequest);
 router.post('/orderList', productController.orderList);
 
