@@ -43,7 +43,6 @@ router.post('/orderList', productController.orderList);
 
 
 router.get('/test', (req, res) => {
-    cons
     res.send(
         "<h2>Backend Is Running</h2>"
     )
