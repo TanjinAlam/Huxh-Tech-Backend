@@ -19,6 +19,7 @@ let web3 = new Web3(
   )
 );
 
+//requested order from user
 const requestedOrder = async (req, res, next) => {
   console.log("req", req.body);
 
@@ -54,6 +55,7 @@ const requestedOrder = async (req, res, next) => {
   });
 };
 
+//accept requested order of user
 const accpetOrder = (req, res, next) => {
   console.log("REQ BOY===", req.body);
   let output = { status: null, data: null, msg: null };
@@ -126,6 +128,7 @@ const accpetOrder = (req, res, next) => {
   deploy();
 };
 
+//sendorder 
 const processingOrder = async (req, res, next) => {
   console.log("req", req.body);
 

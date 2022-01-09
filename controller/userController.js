@@ -153,10 +153,18 @@ const availableProduct = async (req, res, next) => {
 //store the user requested order
 const orderRequest = async (req, res, next) => {
   console.log("OREER REQUEST DATE", req.body);
-  let { userId, productId, quantity, address } = req.body;
+  let { userId, productId, quantity, address, deployedId } = req.body;
   let query =
-    "INSERT INTO product_order_details (id,userId, productId, quantity, address, createdAt) VALUES (?);";
-  let data = [null, userId, productId, quantity, address, new Date()];
+    "INSERT INTO product_order_details (id,userId, deployedId ,productId, quantity, address, createdAt) VALUES (?);";
+  let data = [
+    null,
+    userId,
+    deployedId,
+    productId,
+    quantity,
+    address,
+    new Date(),
+  ];
   conn.query(query, [data], (err, result, fields) => {
     if (err) {
       console.log("OREER REQUEST DATE", err);
@@ -243,7 +251,7 @@ const sendOrder = (req, res, next) => {
             function (error, result) {
               if (!error) {
                 console.log("result", result);
-                let orderNo = result[0].returnValues["orderno"]
+                let orderNo = result[0].returnValues["orderno"];
                 let productUpdateQuery = `UPDATE product_order_details SET orderNo ="${orderNo}" WHERE id = '${id}'`;
                 conn.query(productUpdateQuery, async (err, result) => {
                   if (err) {
@@ -270,7 +278,6 @@ const sendOrder = (req, res, next) => {
             }
           );
         });
-    
     } catch (error) {
       console.log("ERROR", error);
       res.json({ error: true, data: { message: error.message } });
