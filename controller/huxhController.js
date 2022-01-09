@@ -398,92 +398,12 @@ const sendOrderEvent = async (req, res, next) => {
   deploy();
 };
 
-const sendOrder = (req, res, next) => {
-  console.log("REQ BOY===", req.body);
-  let output = { status: null, data: null, msg: null };
-  //who want to send order their pass and walletaddr
-  const walletPRIVKEY = req.body.buyerPrivateKey;
-  const walletAddress = req.body.buyerAddress;
 
-  let trxHash;
-  let goods = req.body.goods;
-  var quantity = req.body.quantity;
-  var photoURL = req.body.photoURL;
-  var videoURL = req.body.videoURL;
-
-  var minABI = HuxtTechDealABI;
-
-  var contractAddress = req.body.contractAddress;
-  var contract = new web3.eth.Contract(minABI, contractAddress);
-  const privateKey = Buffer.from(walletPRIVKEY, "hex");
-  const deploy = async () => {
-    try {
-      const txCount = await web3.eth.getTransactionCount(walletAddress);
-
-      console.log("ASdasdas", txCount);
-
-      const txObject = {
-        nonce: web3.utils.toHex(txCount),
-        gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
-        gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
-        to: contractAddress,
-        data: contract.methods
-          .sendOrder(goods, quantity, photoURL, videoURL)
-          .encodeABI(),
-      };
-      // kovin 42, rinyby 4
-      const tx = new Tx(txObject, { chain: 42 });
-      tx.sign(privateKey);
-
-      const serializedTx = tx.serialize();
-      const raw = "0x" + serializedTx.toString("hex");
-      await web3.eth
-        .sendSignedTransaction(raw)
-        .on("OrderSent", function (error, event) {
-          console.log("error", error);
-          console.log(event);
-        })
-        .then(function (OrderSent) {
-          trxHash = OrderSent.transactionHash;
-          contract.getPastEvents(
-            "OrderSent",
-            {
-              filter: { transactionHash: [trxHash] },
-            },
-            function (error, result) {
-              if (!error) {
-                output.data = result;
-                output.msg = TextString.Order_Success;
-                output.status = responseStatus.STATUS_OK;
-              } else {
-                output.data = error;
-                output.msg = TextString.Order_Failed;
-                output.status = responseStatus.STATUS_NOT_FOUND;
-              }
-            }
-          );
-        });
-
-      // res.json({
-      //   error: false,
-      //   data: {
-      //     message: "Token Send Successfully",
-      //     txId: output,
-      //   },
-      // });
-    } catch (error) {
-      console.log("ERROR", error);
-      res.json({ error: true, data: { message: error.message } });
-    }
-  };
-  deploy();
-};
 
 module.exports = {
   adminLogin,
   deployContract,
   checkHealth,
   owner,
-  sendOrder,
   sendOrderEvent,
 };

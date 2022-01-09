@@ -118,11 +118,10 @@ const login = async (req, res, next) => {
   });
 };
 
-
 const availableProduct = async (req, res, next) => {
   console.log("req", req.body);
 
-  const numberCheckingQry = `SELECT seller_product.* , deplyed_product.contractAddress
+  const numberCheckingQry = `SELECT seller_product.* , deplyed_product.contractAddress, deplyed_product.id as deployedId
   FROM seller_product
   JOIN deplyed_product
   ON seller_product.id = deplyed_product.productId
@@ -149,8 +148,173 @@ const availableProduct = async (req, res, next) => {
     }
   });
 };
+
+const orderRequest = async (req, res, next) => {
+  console.log("OREER REQUEST DATE", req.body);
+  let { userId, productId, quantity } = req.body;
+  let query =
+    "INSERT INTO product_order_details (id,userId, productId, quantity, createdAt) VALUES (?);";
+  let data = [null, userId, productId, quantity, new Date()];
+  conn.query(query, [data], (err, result, fields) => {
+    if (err) {
+      console.log("OREER REQUEST DATE", err);
+      return res.status(200).json({
+        msg: TextString.Order_Request_Failed,
+        status: responseStatus.STATUS_BAD_REQUEST,
+      });
+    } else {
+      let productUpdateQuery = `UPDATE seller_product SET status ="${2}" WHERE id = '${productId}'`;
+      conn.query(productUpdateQuery, async (err, result) => {
+        if (err) {
+          return res.status(200).send({
+            msg: TextString.Order_Request_Failed,
+            status: responseStatus.STATUS_BAD_GATEWAY,
+          });
+        } else {
+          return res.status(200).send({
+            message: TextString.Order_Request_Success,
+            status: responseStatus.STATUS_OK,
+          });
+        }
+      });
+    }
+  });
+};
+
+const sendOrder = (req, res, next) => {
+  console.log("REQ BOY===", req.body);
+  let output = { status: null, data: null, msg: null };
+  //who want to send order their pass and walletaddr
+  const walletPRIVKEY = req.body.privateKey;
+  const walletAddress = req.body.walletAddress;
+
+  let trxHash;
+  let goods = req.body.goods;
+  var quantity = req.body.quantity;
+  var photoURL = req.body.photoURL;
+  var id = req.body.id;
+
+  var videoURL = req.body.videoURL ? req.body.videoURL : "";
+
+  console.log("VIDEO", videoURL);
+
+  var minABI = HuxtTechDealABI;
+
+  var contractAddress = req.body.contractAddress;
+  var contract = new web3.eth.Contract(minABI, contractAddress);
+  const privateKey = Buffer.from(walletPRIVKEY, "hex");
+  const deploy = async () => {
+    try {
+      const txCount = await web3.eth.getTransactionCount(walletAddress);
+
+      console.log("ASdasdas", txCount);
+
+      const txObject = {
+        nonce: web3.utils.toHex(txCount),
+        gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
+        gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
+        to: contractAddress,
+        data: contract.methods
+          .sendOrder(goods, quantity, photoURL, videoURL)
+          .encodeABI(),
+      };
+      // kovin 42, rinyby 4
+      const tx = new Tx(txObject, { chain: 42 });
+      tx.sign(privateKey);
+
+      const serializedTx = tx.serialize();
+      const raw = "0x" + serializedTx.toString("hex");
+      await web3.eth
+        .sendSignedTransaction(raw)
+        .on("OrderSent", function (error, event) {
+          console.log("error", error);
+          console.log(event);
+        })
+        .then(function (OrderSent) {
+          trxHash = OrderSent.transactionHash;
+          contract.getPastEvents(
+            "OrderSent",
+            {
+              filter: { transactionHash: [trxHash] },
+            },
+            function (error, result) {
+              if (!error) {
+                console.log("result", result);
+                let orderNo = result[0].returnValues["orderno"]
+                let productUpdateQuery = `UPDATE product_order_details SET orderNo ="${orderNo}" WHERE id = '${id}'`;
+                conn.query(productUpdateQuery, async (err, result) => {
+                  if (err) {
+                    return res.status(200).json({
+                      msg: TextString.Order_Failed,
+                      data: null,
+                      statis: responseStatus.STATUS_NOT_FOUND,
+                    });
+                  }
+                });
+
+                return res.status(200).json({
+                  msg: TextString.Order_Success,
+                  data: null,
+                  statis: responseStatus.STATUS_OK,
+                });
+              } else {
+                return res.status(200).json({
+                  msg: TextString.Order_Failed,
+                  data: null,
+                  statis: responseStatus.STATUS_NOT_FOUND,
+                });
+              }
+            }
+          );
+        });
+    
+    } catch (error) {
+      console.log("ERROR", error);
+      res.json({ error: true, data: { message: error.message } });
+    }
+  };
+  deploy();
+};
+
+const acceptedOrder = async (req, res, next) => {
+  console.log("req", req.body);
+  let { userId } = req.body;
+
+  const numberCheckingQry = `SELECT product_order_details.* , seller_product.status , seller_product.name, seller_product.price, seller_product.img,deplyed_product.contractAddress
+  FROM product_order_details
+  JOIN seller_product
+  ON product_order_details.productId = seller_product.id
+  JOIN deplyed_product
+  ON product_order_details.deployedId = deplyed_product.id
+  WHERE product_order_details.userId = '${userId}' AND seller_product.status = '${3}'`;
+
+  conn.query(numberCheckingQry, (err, result) => {
+    if (err) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        statis: responseStatus.STATUS_BAD_REQUEST,
+      });
+    } else if (result.length < 1) {
+      return res.status(200).json({
+        msg: TextString.Data_Not_Found,
+        data: result,
+        statis: responseStatus.STATUS_NOT_FOUND,
+      });
+    } else {
+      return res.status(200).json({
+        msg: TextString.Data_Found,
+        data: result,
+        statis: responseStatus.STATUS_OK,
+      });
+    }
+  });
+};
+
 module.exports = {
   signUp,
   login,
-  availableProduct
+  availableProduct,
+  acceptedOrder,
+  orderRequest,
+  sendOrder,
 };

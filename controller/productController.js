@@ -37,35 +37,7 @@ const insertProduct = async (req, res, next) => {
   });
 };
 
-const orderRequest = async (req, res, next) => {
-  let { userId, productId } = req.body;
-  let query =
-    "INSERT INTO product_order_details (id,userId, productId, createdAt) VALUES (?);";
-  let data = [null, userId, productId, new Date()];
-  conn.query(query, [data], (err, result, fields) => {
-    if (err) {
-      return res.status(200).json({
-        msg: TextString.Order_Request_Failed,
-        status: responseStatus.STATUS_BAD_REQUEST,
-      });
-    } else {
-      let productUpdateQuery = `UPDATE seller_product SET status ="${2}" WHERE id = '${productId}'`;
-      conn.query(productUpdateQuery, async (err, result) => {
-        if (err) {
-          return res.status(200).send({
-            msg: TextString.Order_Request_Failed,
-            status: responseStatus.STATUS_BAD_GATEWAY,
-          });
-        } else {
-          return res.status(200).send({
-            message: TextString.Order_Request_Success,
-            status: responseStatus.STATUS_OK,
-          });
-        }
-      });
-    }
-  });
-};
+
 
 const productList = async (req, res, next) => {
   console.log("req", req.body);
@@ -103,7 +75,7 @@ const deployedProductList = async (req, res, next) => {
 
   const numberCheckingQry = `SELECT seller_product.* 
   FROM seller_product
-  WHERE seller_product.userId = '${userId}' AND seller_product.status = '${1}'`;
+  WHERE seller_product.status = '${1}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
     if (err) {
@@ -162,7 +134,6 @@ const orderList = async (req, res, next) => {
 module.exports = {
   insertProduct,
   productList,
-  orderRequest,
   orderList,
   deployedProductList
 };
