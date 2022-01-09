@@ -94,6 +94,7 @@ const accpetOrder = (req, res, next) => {
           console.log("OrderSent", result);
           let productUpdateQuery = `UPDATE seller_product SET status ="${3}" WHERE id = '${productId}'`;
           conn.query(productUpdateQuery, async (err, result) => {
+            console.log("ERROR",err)
             if (err) {
               return res.status(200).json({
                 msg: TextString.Order_Accepted_Failed,
