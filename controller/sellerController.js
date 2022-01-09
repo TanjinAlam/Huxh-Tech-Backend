@@ -111,6 +111,7 @@ const accpetOrder = (req, res, next) => {
           });
         })
         .catch((err) => {
+          console.log("ERROR",err)
           return res.status(200).json({
             msg: TextString.Order_Accepted_Failed,
             data: null,
