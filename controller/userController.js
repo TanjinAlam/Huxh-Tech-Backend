@@ -118,6 +118,7 @@ const login = async (req, res, next) => {
   });
 };
 
+//see the available product for buy
 const availableProduct = async (req, res, next) => {
   console.log("req", req.body);
 
@@ -131,30 +132,31 @@ const availableProduct = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else if (result.length < 1) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
         data: result,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     } else {
       return res.status(200).json({
         msg: TextString.Data_Found,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
 };
 
+//store the user requested order
 const orderRequest = async (req, res, next) => {
   console.log("OREER REQUEST DATE", req.body);
-  let { userId, productId, quantity } = req.body;
+  let { userId, productId, quantity, address } = req.body;
   let query =
-    "INSERT INTO product_order_details (id,userId, productId, quantity, createdAt) VALUES (?);";
-  let data = [null, userId, productId, quantity, new Date()];
+    "INSERT INTO product_order_details (id,userId, productId, quantity, address, createdAt) VALUES (?);";
+  let data = [null, userId, productId, quantity, address, new Date()];
   conn.query(query, [data], (err, result, fields) => {
     if (err) {
       console.log("OREER REQUEST DATE", err);
@@ -181,6 +183,7 @@ const orderRequest = async (req, res, next) => {
   });
 };
 
+//confirm the order to the blockchain
 const sendOrder = (req, res, next) => {
   console.log("REQ BOY===", req.body);
   let output = { status: null, data: null, msg: null };
@@ -276,6 +279,7 @@ const sendOrder = (req, res, next) => {
   deploy();
 };
 
+//accepted orderList by seller
 const acceptedOrder = async (req, res, next) => {
   console.log("req", req.body);
   let { userId } = req.body;
