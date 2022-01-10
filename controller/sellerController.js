@@ -62,6 +62,7 @@ const accpetOrder = (req, res, next) => {
   //who want to send order their pass and walletaddr
   const walletPRIVKEY = req.body.privateKey;
   const walletAddress = req.body.walletAddress;
+  const buyerAddress = req.body.buyerAddress;
   const productId = req.body.productId;
 
   var minABI = HuxtTechDealABI;
@@ -80,7 +81,7 @@ const accpetOrder = (req, res, next) => {
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
         to: contractAddress,
-        data: contract.methods.updateBuyer(walletAddress).encodeABI(),
+        data: contract.methods.updateBuyer(buyerAddress).encodeABI(),
       };
       // kovin 42, rinyby 4
       const tx = new Tx(txObject, { chain: 42 });
