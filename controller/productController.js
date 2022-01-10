@@ -51,19 +51,19 @@ const productList = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else if (result.length < 1) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
         data: result,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     } else {
       return res.status(200).json({
         msg: TextString.Data_Found,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
@@ -81,19 +81,19 @@ const deployedProductList = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else if (result.length < 1) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
         data: result,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     } else {
       return res.status(200).json({
         msg: TextString.Data_Found,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
@@ -116,7 +116,7 @@ const orderList = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Insert_Failed,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     }
 
@@ -125,7 +125,7 @@ const orderList = async (req, res, next) => {
       return res.status(200).json({
         msg: TextString.Data_Insert_Success,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
