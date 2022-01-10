@@ -192,7 +192,7 @@ const orderRequest = async (req, res, next) => {
 };
 
 //confirm the order to the blockchain
-const sendOrder = (req, res, next) => {
+const sendOrder = async (req, res, next) => {
   console.log("REQ BOY===", req.body);
   let output = { status: null, data: null, msg: null };
   //who want to send order their pass and walletaddr
@@ -213,6 +213,9 @@ const sendOrder = (req, res, next) => {
 
   var contractAddress = req.body.contractAddress;
   var contract = new web3.eth.Contract(minABI, contractAddress);
+  let buyerAddr = await contract.methods.buyerAddr().call();
+  console.log("buyerAddr",buyerAddr)
+
   const privateKey = Buffer.from(walletPRIVKEY, "hex");
   const deploy = async () => {
     try {
