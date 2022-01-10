@@ -127,7 +127,7 @@ const accpetOrder = (req, res, next) => {
       });
     }
   };
-  // deploy();
+  deploy();
 };
 
 //sendorder

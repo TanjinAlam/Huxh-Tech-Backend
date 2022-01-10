@@ -53,7 +53,7 @@ router.post('/orderList', productController.orderList);
 
 
 router.post('/requestedOrder', sellerController.requestedOrder);
-router.post('/accpetOrder', sellerController.accpetOrder);
+router.post('/accpetOrders', sellerController.accpetOrder);
 router.post('/processingOrder', sellerController.processingOrder);
 router.post('/setProductPrice', sellerController.setProductPrice);
 router.post('/setShipmentPrice', sellerController.setShipmentPrice);
