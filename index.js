@@ -22,7 +22,7 @@ dotenv.config();
 app.use(
   cors({
     origin: [
-      "http://deal.huxhtech.com",
+      "https://backend.huxhtech.com",
       "http://www.deal.huxhtech.com",
       "http://localhost:3000",
     ],
