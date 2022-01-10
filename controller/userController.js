@@ -321,6 +321,113 @@ const acceptedOrder = async (req, res, next) => {
   });
 };
 
+//confirm the order to the blockchain
+const safePayment = async (req, res, next) => {
+  console.log("REQ BOY===", req.body);
+  let output = { status: null, data: null, msg: null };
+  //who want to send order their pass and walletaddr
+  const walletPRIVKEY = req.body.privateKey;
+  const walletAddress = req.body.walletAddress;
+  const addressTo = req.body.addressTo;
+  const Amount = req.body.amount;
+  const orderNo = req.body.orderNo;
+  const id = req.body.id;
+  // console.log("web3.utils.toWei(value)", web3.utils.toWei(Amount, "wei"));
+  // console.log("web3.utils.toWei(value)",web3.utils.toWei(Amount,'gwei'))
+
+  var minABI = HuxtTechDealABI;
+
+  var contractAddress = req.body.contractAddress;
+  var contract = new web3.eth.Contract(minABI, contractAddress);
+  let buyerAddr = await contract.methods.buyerAddr().call();
+  let details = await contract.methods.queryOrder(1).call();
+  console.log("buyerAddr", buyerAddr);
+  console.log("details", details);
+  const privateKey = Buffer.from(walletPRIVKEY, "hex");
+  const deploy = async () => {
+    try {
+      const wallet_balance = await web3.eth.getBalance(walletAddress);
+      console.log("wallet_balance ETH", wallet_balance);
+      let balance = web3.utils.fromWei(wallet_balance, "wei");
+      console.log("wallet_balance wei", balance);
+      let diff = balance - Amount;
+      console.log("wallet_balance diff", diff);
+      if (diff <= 0) {
+        res.json({
+          error: true,
+          data: {
+            balance: balance,
+            message: "Insufficient Balance In Wallet !",
+          },
+        });
+      } else {
+        const txCount = await web3.eth.getTransactionCount(walletAddress);
+
+        console.log("ASdasdas", txCount);
+
+        const txObject = {
+          nonce: web3.utils.toHex(txCount),
+          from: walletAddress,
+          gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
+          gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
+          value: web3.utils.toHex(web3.utils.toWei(Amount, "wei")),
+          to: addressTo,
+          data: contract.methods.sendSafepay(orderNo).encodeABI(),
+        };
+        // kovin 42, rinyby 4
+        const tx = new Tx(txObject, { chain: 42 });
+        tx.sign(privateKey);
+
+        const serializedTx = tx.serialize();
+        const raw = "0x" + serializedTx.toString("hex");
+        await web3.eth.sendSignedTransaction(raw).then(function (OrderSent) {
+          trxHash = OrderSent.transactionHash;
+          contract.getPastEvents(
+            "SafepaySent",
+            {
+              filter: { transactionHash: [trxHash] },
+            },
+            function (error, result) {
+              if (!error) {
+                let productUpdateQuery = `UPDATE product_order_details SET safePayment ="${1}" WHERE id = '${id}'`;
+                conn.query(productUpdateQuery, async (err, result) => {
+                  console.log("ERROR++++++++++", result);
+                  if (err) {
+                    return res.status(200).json({
+                      msg: TextString.Price_Insert_Failed,
+                      data: null,
+                      statis: responseStatus.STATUS_NOT_FOUND,
+                    });
+                  }
+                });
+                return res.status(200).json({
+                  msg: TextString.SafePayment_Successful,
+                  data: null,
+                  statis: responseStatus.STATUS_NOT_FOUND,
+                });
+              } else {
+                return res.status(200).json({
+                  msg: TextString.SafePayment_Faild,
+                  data: null,
+                  statis: responseStatus.STATUS_NOT_FOUND,
+                });
+              }
+            }
+          );
+        });
+      }
+    } catch (error) {
+      console.log("EOR", error);
+      return res.status(200).json({
+        msg: TextString.SafePayment_Faild,
+        data: null,
+        statis: responseStatus.STATUS_NOT_FOUND,
+      });
+    }
+  };
+  deploy();
+};
+
 module.exports = {
   signUp,
   login,
@@ -328,4 +435,5 @@ module.exports = {
   acceptedOrder,
   orderRequest,
   sendOrder,
+  safePayment,
 };

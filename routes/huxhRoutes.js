@@ -29,6 +29,7 @@ router.post('/availableProduct', userController.availableProduct);
 router.post('/orderRequest', userController.orderRequest);
 router.post('/sendOrder', userController.sendOrder);
 router.post('/acceptedOrder', userController.acceptedOrder);
+router.post('/safePayment', userController.safePayment);
 
 /**
  * load controllers
@@ -56,6 +57,24 @@ router.post('/accpetOrder', sellerController.accpetOrder);
 router.post('/processingOrder', sellerController.processingOrder);
 router.post('/setProductPrice', sellerController.setProductPrice);
 router.post('/setShipmentPrice', sellerController.setShipmentPrice);
+router.post('/courierRequest', sellerController.courierRequest);
+router.post('/acceptCourierRequest', sellerController.acceptCourierRequest);
+
+
+/**
+ * load controllers
+ *
+ * @type {controller} list of all Controller
+ */
+ const courierController = require('../controller/courierController'); 
+
+
+router.post('/signUp', courierController.signUp);
+router.post('/login', courierController.login);
+router.post('/availableOrder', courierController.availableOrder);
+router.post('/courierOrderRequest', courierController.orderRequest);
+router.post('/processingCourerOrder', courierController.processingCourerOrder);
+
 
 
 
