@@ -331,7 +331,6 @@ const safePayment = async (req, res, next) => {
   //who want to send order their pass and walletaddr
   const walletPRIVKEY = req.body.privateKey;
   const walletAddress = req.body.walletAddress;
-  const addressTo = req.body.addressTo;
   const Amount = req.body.amount;
   const orderNo = req.body.orderNo;
   const id = req.body.id;
@@ -374,7 +373,7 @@ const safePayment = async (req, res, next) => {
           gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
           value: web3.utils.toHex(web3.utils.toWei(Amount, "wei")),
-          to: addressTo,
+          to: contractAddress,
           data: contract.methods.sendSafepay(orderNo).encodeABI(),
         };
         // kovin 42, rinyby 4

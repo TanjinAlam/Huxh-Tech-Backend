@@ -249,6 +249,7 @@ const sendOrder = (req, res, next) => {
 };
 
 const setProductPrice = (req, res, next) => {
+  console.log("HERE=============")
   console.log("REQ BOY===", req.body);
   //who want to send order their pass and walletaddr
   const walletPRIVKEY = req.body.privateKey;
