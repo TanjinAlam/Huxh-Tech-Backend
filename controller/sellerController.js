@@ -445,11 +445,15 @@ const setShipmentPrice = (req, res, next) => {
 //requested order from user
 const courierRequest = async (req, res, next) => {
   console.log("req", req.body);
-
-  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName
+ 
+  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName,product_order_details.id as productOrderId,product_order_details.productId,seller_product.price,seller_product.img,seller_product.name
     FROM courier_request
     JOIN buy_user_info
     ON courier_request.userId = buy_user_info.id
+    JOIN product_order_details
+    ON courier_request.productOrderId = product_order_details.id
+    JOIN seller_product
+    ON product_order_details.productId = seller_product.id
     WHERE courier_request.assigned IS NULL`;
 
   conn.query(numberCheckingQry, (err, result) => {
@@ -474,16 +478,16 @@ const courierRequest = async (req, res, next) => {
   });
 };
 
-//accept requested order of user its calling sendInvoice function 
+//accept requested order of user its calling sendInvoice function
 const acceptCourierRequest = async (req, res, next) => {
   console.log("REQ BOY===", req.body);
   let output = { status: null, data: null, msg: null };
   //who want to send order their pass and walletaddr
-  const walletPRIVKEY = req.body.privateKey
-  const walletAddress = req.body.walletAddress
-  const productOrderId = req.body.productOrderId
-  const id = req.body.id
-  const date = req.body.date
+  const walletPRIVKEY = req.body.privateKey;
+  const walletAddress = req.body.walletAddress;
+  const productOrderId = req.body.productOrderId;
+  const id = req.body.id;
+  const date = req.body.date;
 
   const UnixDate = new Date(date).getTime() / 1000;
 
