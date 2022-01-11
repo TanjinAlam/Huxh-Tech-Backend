@@ -445,7 +445,7 @@ const setShipmentPrice = (req, res, next) => {
 //requested order from user
 const courierRequest = async (req, res, next) => {
   console.log("req", req.body);
- 
+
   const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName,product_order_details.id as productOrderDetailsId,product_order_details.productId,seller_product.price,seller_product.img,seller_product.name,deplyed_product.id as deployedProductId,deplyed_product.contractAddress
     FROM courier_request
     JOIN buy_user_info
@@ -544,7 +544,7 @@ const acceptCourierRequest = async (req, res, next) => {
         });
       }
     });
-
+    var contract = new web3.eth.Contract(minABI, contractAddress);
     const privateKey = Buffer.from(walletPRIVKEY, "hex");
     const deploy = async () => {
       try {
