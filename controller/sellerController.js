@@ -490,7 +490,10 @@ const acceptCourierRequest = async (req, res, next) => {
   const productOrderId = req.body.productOrderId;
   const id = req.body.id;
   const contractAddress = req.body.contractAddress;
-  const date = new Date();
+  var year = date_variable.getFullYear();
+  var month = date_variable.getMonth() + 1;
+  var day = date_variable.getDate();
+  let date = year + "-" + month + "-" + day;
 
   const UnixDate = new Date(date).getTime() / 1000;
 

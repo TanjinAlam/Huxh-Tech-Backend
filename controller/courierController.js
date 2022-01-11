@@ -317,8 +317,11 @@ const deliveryOrder = async (req, res, next) => {
   let trxHash;
   var id = req.body.id;
 
-  let date = new Date();
-  console.log("date", date);
+  var year = date_variable.getFullYear();
+  var month = date_variable.getMonth() + 1;
+  var day = date_variable.getDate();
+  let date = year + "-" + month + "-" + day;
+
   const UnixDate = new Date(date).getTime() / 1000;
 
   console.log("VIDEO", videoURL);
