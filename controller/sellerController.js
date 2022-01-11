@@ -37,19 +37,19 @@ const requestedOrder = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else if (result.length < 1) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
         data: result,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     } else {
       return res.status(200).json({
         msg: TextString.Data_Found,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
@@ -100,7 +100,7 @@ const accpetOrder = (req, res, next) => {
               return res.status(200).json({
                 msg: TextString.Order_Accepted_Failed,
                 data: null,
-                statis: responseStatus.STATUS_NOT_FOUND,
+                status: responseStatus.STATUS_NOT_FOUND,
               });
             }
           });
@@ -108,7 +108,7 @@ const accpetOrder = (req, res, next) => {
           return res.status(200).json({
             msg: TextString.Order_Accepted,
             data: null,
-            statis: responseStatus.STATUS_OK,
+            status: responseStatus.STATUS_OK,
           });
         })
         .catch((err) => {
@@ -116,7 +116,7 @@ const accpetOrder = (req, res, next) => {
           return res.status(200).json({
             msg: TextString.Order_Accepted_Failed,
             data: null,
-            statis: responseStatus.STATUS_NOT_FOUND,
+            status: responseStatus.STATUS_NOT_FOUND,
           });
         });
     } catch (error) {
@@ -124,7 +124,7 @@ const accpetOrder = (req, res, next) => {
       return res.status(200).json({
         msg: TextString.Order_Accepted_Failed,
         data: null,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     }
   };
@@ -149,19 +149,19 @@ const processingOrder = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else if (result.length < 1) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
         data: result,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     } else {
       return res.status(200).json({
         msg: TextString.Data_Found,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
@@ -304,7 +304,7 @@ const setProductPrice = (req, res, next) => {
                     return res.status(200).json({
                       msg: TextString.Price_Insert_Failed,
                       data: null,
-                      statis: responseStatus.STATUS_NOT_FOUND,
+                      status: responseStatus.STATUS_NOT_FOUND,
                     });
                   }
                 });
@@ -312,13 +312,13 @@ const setProductPrice = (req, res, next) => {
                 return res.status(200).json({
                   msg: TextString.Price_Inserted,
                   data: null,
-                  statis: responseStatus.STATUS_OK,
+                  status: responseStatus.STATUS_OK,
                 });
               } else {
                 return res.status(200).json({
                   msg: TextString.Price_Insert_Failed,
                   data: null,
-                  statis: responseStatus.STATUS_NOT_FOUND,
+                  status: responseStatus.STATUS_NOT_FOUND,
                 });
               }
             }
@@ -329,7 +329,7 @@ const setProductPrice = (req, res, next) => {
           return res.status(200).json({
             msg: TextString.Price_Insert_Failed,
             data: null,
-            statis: responseStatus.STATUS_NOT_FOUND,
+            status: responseStatus.STATUS_NOT_FOUND,
           });
         });
     } catch (error) {
@@ -337,7 +337,7 @@ const setProductPrice = (req, res, next) => {
       return res.status(200).json({
         msg: TextString.Price_Insert_Failed,
         data: null,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     }
   };
@@ -402,7 +402,7 @@ const setShipmentPrice = (req, res, next) => {
                     return res.status(200).json({
                       msg: TextString.Price_Insert_Failed,
                       data: null,
-                      statis: responseStatus.STATUS_NOT_FOUND,
+                      status: responseStatus.STATUS_NOT_FOUND,
                     });
                   }
                 });
@@ -410,13 +410,13 @@ const setShipmentPrice = (req, res, next) => {
                 return res.status(200).json({
                   msg: TextString.Price_Inserted,
                   data: null,
-                  statis: responseStatus.STATUS_OK,
+                  status: responseStatus.STATUS_OK,
                 });
               } else {
                 return res.status(200).json({
                   msg: TextString.Price_Insert_Failed,
                   data: null,
-                  statis: responseStatus.STATUS_NOT_FOUND,
+                  status: responseStatus.STATUS_NOT_FOUND,
                 });
               }
             }
@@ -427,7 +427,7 @@ const setShipmentPrice = (req, res, next) => {
           return res.status(200).json({
             msg: TextString.Price_Insert_Failed,
             data: null,
-            statis: responseStatus.STATUS_NOT_FOUND,
+            status: responseStatus.STATUS_NOT_FOUND,
           });
         });
     } catch (error) {
@@ -435,7 +435,7 @@ const setShipmentPrice = (req, res, next) => {
       return res.status(200).json({
         msg: TextString.Price_Insert_Failed,
         data: null,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     }
   };
@@ -462,19 +462,19 @@ const courierRequest = async (req, res, next) => {
     if (err) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
-        statis: responseStatus.STATUS_BAD_REQUEST,
+        status: responseStatus.STATUS_BAD_REQUEST,
       });
     } else if (result.length < 1) {
       return res.status(200).json({
         msg: TextString.Data_Not_Found,
         data: result,
-        statis: responseStatus.STATUS_NOT_FOUND,
+        status: responseStatus.STATUS_NOT_FOUND,
       });
     } else {
       return res.status(200).json({
         msg: TextString.Data_Found,
         data: result,
-        statis: responseStatus.STATUS_OK,
+        status: responseStatus.STATUS_OK,
       });
     }
   });
@@ -524,7 +524,7 @@ const acceptCourierRequest = async (req, res, next) => {
   if (courierInformation.length == 0) {
     return res.status(200).json({
       msg: TextString.Data_Not_Found,
-      statis: responseStatus.STATUS_BAD_REQUEST,
+      status: responseStatus.STATUS_BAD_REQUEST,
     });
   } else {
     let orderNo = courierInformation[0].orderNo;
@@ -536,7 +536,7 @@ const acceptCourierRequest = async (req, res, next) => {
         return res.status(200).json({
           msg: TextString.Price_Insert_Failed,
           data: null,
-          statis: responseStatus.STATUS_NOT_FOUND,
+          status: responseStatus.STATUS_NOT_FOUND,
         });
       }
     });
@@ -546,7 +546,7 @@ const acceptCourierRequest = async (req, res, next) => {
         return res.status(200).json({
           msg: TextString.Price_Insert_Failed,
           data: null,
-          statis: responseStatus.STATUS_NOT_FOUND,
+          status: responseStatus.STATUS_NOT_FOUND,
         });
       }
     });
@@ -592,21 +592,21 @@ const acceptCourierRequest = async (req, res, next) => {
                     return res.status(200).json({
                       msg: TextString.Courier_Assigned_Failed,
                       data: null,
-                      statis: responseStatus.STATUS_NOT_FOUND,
+                      status: responseStatus.STATUS_NOT_FOUND,
                     });
                   }
                 });
                 return res.status(200).json({
                   msg: TextString.Courier_Assigned_Successful,
                   data: null,
-                  statis: responseStatus.STATUS_NOT_FOUND,
+                  status: responseStatus.STATUS_OK,
                 });
               } else {
                 console.log("EEEOR=======",error)
                 return res.status(200).json({
                   msg: TextString.Courier_Assigned_Failed,
                   data: null,
-                  statis: responseStatus.STATUS_NOT_FOUND,
+                  status: responseStatus.STATUS_NOT_FOUND,
                 });
               }
             }
@@ -617,7 +617,7 @@ const acceptCourierRequest = async (req, res, next) => {
         return res.status(200).json({
           msg: TextString.Courier_Assigned_Failed,
           data: null,
-          statis: responseStatus.STATUS_NOT_FOUND,
+          status: responseStatus.STATUS_NOT_FOUND,
         });
       }
     };
