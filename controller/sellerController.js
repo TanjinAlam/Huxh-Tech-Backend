@@ -455,7 +455,7 @@ const courierRequest = async (req, res, next) => {
     JOIN seller_product
     ON product_order_details.productId = seller_product.id
     JOIN deplyed_product
-    ON product_order_details.deploayedId = deplyed_product.id
+    ON product_order_details.deployedId = deplyed_product.id
     WHERE courier_request.assigned IS NULL`;
 
   conn.query(numberCheckingQry, (err, result) => {
