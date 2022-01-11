@@ -59,6 +59,7 @@ router.post('/setProductPrice', sellerController.setProductPrice);
 router.post('/setShipmentPrice', sellerController.setShipmentPrice);
 router.post('/courierRequest', sellerController.courierRequest);
 router.post('/acceptCourierRequest', sellerController.acceptCourierRequest);
+router.post('/verifyPhotoSeller', sellerController.verifyPhotoSeller);
 
 
 /**
@@ -74,7 +75,7 @@ router.post('/login', courierController.login);
 router.post('/availableOrder', courierController.availableOrder);
 router.post('/courierOrderRequest', courierController.orderRequest);
 router.post('/processingCourerOrder', courierController.processingCourerOrder);
-
+router.post('/verifyPhotoCourier', courierController.verifyPhotoCourier);
 
 
 

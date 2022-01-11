@@ -283,7 +283,11 @@ const sendOrder = async (req, res, next) => {
         });
     } catch (error) {
       console.log("ERROR", error);
-      res.json({ error: true, data: { message: error.message } });
+      return res.status(200).json({
+        msg: TextString.Order_Failed,
+        data: null,
+        status: responseStatus.STATUS_NOT_FOUND,
+      });
     }
   };
   deploy();
