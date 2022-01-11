@@ -581,6 +581,7 @@ const acceptCourierRequest = async (req, res, next) => {
               filter: { transactionHash: [trxHash] },
             },
             function (error, output) {
+              console.log("OUT=====",output)
               let finalDate = output[0].returnValues["delivery_date"];
               let invoiceNo = output[0].returnValues["invoiceseq"];
               if (!error) {
@@ -601,6 +602,7 @@ const acceptCourierRequest = async (req, res, next) => {
                   statis: responseStatus.STATUS_NOT_FOUND,
                 });
               } else {
+                console.log("EEEOR=======",error)
                 return res.status(200).json({
                   msg: TextString.Courier_Assigned_Failed,
                   data: null,
@@ -613,7 +615,7 @@ const acceptCourierRequest = async (req, res, next) => {
       } catch (error) {
         console.log("ERROR", error);
         return res.status(200).json({
-          msg: TextString.Order_Accepted_Failed,
+          msg: TextString.Courier_Assigned_Failed,
           data: null,
           statis: responseStatus.STATUS_NOT_FOUND,
         });
