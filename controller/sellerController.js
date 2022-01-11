@@ -502,10 +502,12 @@ const acceptCourierRequest = async (req, res, next) => {
 
   var minABI = HuxtTechDealABI;
   //get courier details walletAddress
-  const courierInfoQuery = `SELECT courier_request.* , product_order_details.orderNo
+  const courierInfoQuery = `SELECT courier_request.* , product_order_details.orderNo , buy_user_info.walletAddress 
   FROM courier_request
   JOIN product_order_details
   ON courier_request.productOrderId = product_order_details.id
+  JOIN buy_user_info
+  ON courier_request.userId = buy_user_info.id
   WHERE courier_request.id = '${id}' AND courier_request.assigned IS NULL`;
   const courierInformation = await new Promise((resolve, reject) => {
     conn.query(courierInfoQuery, (err, result) => {
