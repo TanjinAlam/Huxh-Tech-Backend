@@ -583,7 +583,7 @@ const acceptCourierRequest = async (req, res, next) => {
             function (error, output) {
               console.log("OUT=====",output)
               let finalDate = output[0].returnValues["delivery_date"];
-              let invoiceNo = output[0].returnValues["invoiceseq"];
+              let invoiceNo = output[0].returnValues["invoiceno"];
               if (!error) {
                 let productUpdateQuery = `UPDATE product_order_details SET deliveryDate ="${finalDate}",invoiceNo ='${invoiceNo}' WHERE id = '${productOrderId}'`;
                 conn.query(productUpdateQuery, async (err, result) => {
