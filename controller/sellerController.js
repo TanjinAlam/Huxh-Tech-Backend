@@ -489,6 +489,7 @@ const acceptCourierRequest = async (req, res, next) => {
   const walletAddress = req.body.walletAddress;
   const productOrderId = req.body.productOrderId;
   const id = req.body.id;
+  const contractAddress = req.body.contractAddress;
   const date = new Date();
 
   const UnixDate = new Date(date).getTime() / 1000;
