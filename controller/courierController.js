@@ -316,7 +316,7 @@ const deliveryOrder = async (req, res, next) => {
 
   let trxHash;
   var id = req.body.id;
-
+  var date_variable = new Date();
   var year = date_variable.getFullYear();
   var month = date_variable.getMonth() + 1;
   var day = date_variable.getDate();
