@@ -446,7 +446,7 @@ const setShipmentPrice = (req, res, next) => {
 const courierRequest = async (req, res, next) => {
   console.log("req", req.body);
  
-  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName,product_order_details.id as productOrderDetailsId,product_order_details.productId,seller_product.price,seller_product.img,seller_product.name
+  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName,product_order_details.id as productOrderDetailsId,product_order_details.productId,seller_product.price,seller_product.img,seller_product.name,deplyed_product.id as deployedProductId,deplyed_product.contractAddress
     FROM courier_request
     JOIN buy_user_info
     ON courier_request.userId = buy_user_info.id
@@ -454,6 +454,8 @@ const courierRequest = async (req, res, next) => {
     ON courier_request.productOrderId = product_order_details.id
     JOIN seller_product
     ON product_order_details.productId = seller_product.id
+    JOIN deplyed_product
+    ON product_order_details.deploayedId = deplyed_product.id
     WHERE courier_request.assigned IS NULL`;
 
   conn.query(numberCheckingQry, (err, result) => {
