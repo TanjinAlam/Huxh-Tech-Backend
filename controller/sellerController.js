@@ -249,7 +249,7 @@ const sendOrder = (req, res, next) => {
 };
 
 const setProductPrice = (req, res, next) => {
-  console.log("HERE=============")
+  console.log("HERE=============");
   console.log("REQ BOY===", req.body);
   //who want to send order their pass and walletaddr
   const walletPRIVKEY = req.body.privateKey;
@@ -446,8 +446,10 @@ const setShipmentPrice = (req, res, next) => {
 const courierRequest = async (req, res, next) => {
   console.log("req", req.body);
 
-  const numberCheckingQry = `SELECT courier_request.* 
+  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName
     FROM courier_request
+    JOIN buy_user_info
+    ON courier_request.userId = buy_user_info.id
     WHERE courier_request.assigned IS NULL`;
 
   conn.query(numberCheckingQry, (err, result) => {
@@ -586,7 +588,7 @@ const acceptCourierRequest = async (req, res, next) => {
                 });
               } else {
                 return res.status(200).json({
-                  msg: TextString.Courier_Assigned_Failed ,
+                  msg: TextString.Courier_Assigned_Failed,
                   data: null,
                   statis: responseStatus.STATUS_NOT_FOUND,
                 });

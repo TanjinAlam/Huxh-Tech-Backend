@@ -405,7 +405,7 @@ const safePayment = async (req, res, next) => {
                 return res.status(200).json({
                   msg: TextString.SafePayment_Successful,
                   data: null,
-                  status: responseStatus.STATUS_NOT_FOUND,
+                  status: responseStatus.STATUS_OK,
                 });
               } else {
                 return res.status(200).json({

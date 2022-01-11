@@ -132,7 +132,7 @@ const availableOrder = async (req, res, next) => {
       ON product_order_details.userId = buy_user_info.id
       JOIN deplyed_product
       ON product_order_details.deployedId = deplyed_product.id
-      WHERE product_order_details.courierId IS NULL`;
+      WHERE product_order_details.courierId IS NULL AND product_order_details.safePayment = '${1}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
     if (err) {
@@ -180,7 +180,7 @@ const orderRequest = async (req, res, next) => {
 };
 
 const processingCourerOrder = async (req, res, next) => {
-  let userId = req.body.userId
+  let userId = req.body.userId;
   const numberCheckingQry = `SELECT product_order_details.* , deplyed_product.contractAddress ,buy_user_info.walletAddress , seller_product.name,seller_product.price,seller_product.img,courier_request.userId as courierId,courier_request.assigned
       FROM product_order_details
       JOIN seller_product
