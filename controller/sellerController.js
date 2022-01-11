@@ -446,7 +446,7 @@ const setShipmentPrice = (req, res, next) => {
 const courierRequest = async (req, res, next) => {
   console.log("req", req.body);
  
-  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName,product_order_details.id as productOrderId,product_order_details.productId,seller_product.price,seller_product.img,seller_product.name
+  const numberCheckingQry = `SELECT courier_request.* , buy_user_info.walletAddress, buy_user_info.walletKey, buy_user_info.userName,product_order_details.id as productOrderDetailsId,product_order_details.productId,seller_product.price,seller_product.img,seller_product.name
     FROM courier_request
     JOIN buy_user_info
     ON courier_request.userId = buy_user_info.id
@@ -487,7 +487,7 @@ const acceptCourierRequest = async (req, res, next) => {
   const walletAddress = req.body.walletAddress;
   const productOrderId = req.body.productOrderId;
   const id = req.body.id;
-  const date = req.body.date;
+  const date = new Date();
 
   const UnixDate = new Date(date).getTime() / 1000;
 
