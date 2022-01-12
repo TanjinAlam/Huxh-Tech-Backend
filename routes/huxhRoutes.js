@@ -79,6 +79,10 @@ router.post('/verifyPhotoCourier', courierController.verifyPhotoCourier);
 
 
 
+router.post('/registration', courierController.registration);
+
+
+
 
 router.get('/test', (req, res) => {
     res.send(

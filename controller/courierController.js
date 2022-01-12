@@ -407,6 +407,26 @@ const deliveryOrder = async (req, res, next) => {
   deploy();
 };
 
+
+const registration = async (req, res, next) => {
+  
+  if(req.body){
+    return res.status(200).json({
+      msg: "DATA RECEIVED",
+      data: req.body,
+      status: responseStatus.STATUS_OK,
+    });
+  }
+  else{
+    return res.status(404).json({
+      msg: "DATA NOT FOUND",
+      data: null,
+      status: responseStatus.STATUS_NOT_FOUND,
+    });
+  }
+
+}
+
 module.exports = {
   signUp,
   login,
@@ -415,4 +435,5 @@ module.exports = {
   processingCourerOrder,
   verifyPhotoCourier,
   deliveryOrder,
+  registration
 };
