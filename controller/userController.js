@@ -125,7 +125,7 @@ const availableProduct = async (req, res, next) => {
   const numberCheckingQry = `SELECT seller_product.* , deplyed_product.contractAddress, deplyed_product.id as deployedId
   FROM seller_product
   JOIN deplyed_product
-  ON seller_product.id = deplyed_product.id
+  ON seller_product.id = deplyed_product.productId
   WHERE seller_product.status = '${1}'`;
 
   conn.query(numberCheckingQry, (err, result) => {
