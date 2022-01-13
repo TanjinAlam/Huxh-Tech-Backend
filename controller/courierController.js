@@ -323,8 +323,6 @@ const deliveryOrder = async (req, res, next) => {
 
   const UnixDate = new Date(date).getTime() / 1000;
 
-  console.log("VIDEO", videoURL);
-
   var minABI = HuxtTechDealABI;
 
   var contractAddress = req.body.contractAddress;
