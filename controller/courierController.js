@@ -311,7 +311,7 @@ const deliveryOrder = async (req, res, next) => {
   //who want to send order their pass and walletaddr
   const walletPRIVKEY = req.body.privateKey;
   const walletAddress = req.body.walletAddress;
-  const invoiceNo = req.body.walletAddress;
+  const invoiceno = req.body.walletAddress;
 
 
   let trxHash;
@@ -324,12 +324,17 @@ const deliveryOrder = async (req, res, next) => {
 
   const UnixDate = new Date(date).getTime() / 1000;
 
+
+  console.log("UnixDate",UnixDate)
+
   var minABI = HuxtTechDealABI;
 
   var contractAddress = req.body.contractAddress;
   var contract = new web3.eth.Contract(minABI, contractAddress);
-  let buyerAddr = await contract.methods.queryPhoto(req.body.orderNo).call();
+  let buyerAddr = await contract.methods.queryOrder(1).call();
+  let courierAddrcourierAddr = await contract.methods.courierAddr().call();
   console.log("buyerAddr", buyerAddr);
+  console.log("courierAddrcourierAddr", courierAddrcourierAddr);
 
   const privateKey = Buffer.from(walletPRIVKEY, "hex");
   const deploy = async () => {
@@ -343,7 +348,7 @@ const deliveryOrder = async (req, res, next) => {
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
         to: contractAddress,
-        data: contract.methods.delivery(invoiceNo, UnixDate).encodeABI(),
+        data: contract.methods.delivery(invoiceno, UnixDate).encodeABI(),
       };
       // kovin 42, rinyby 4
       const tx = new Tx(txObject, { chain: 42 });
@@ -353,31 +358,29 @@ const deliveryOrder = async (req, res, next) => {
       const raw = "0x" + serializedTx.toString("hex");
       await web3.eth
         .sendSignedTransaction(raw)
-        .on("OrderSent", function (error, event) {
-          console.log("error", error);
-          console.log(event);
-        })
-        .then(function (OrderSent) {
-          trxHash = OrderSent.transactionHash;
+        .then(function (result) {
+          console.log("asdasdsa",result)
+          trxHash = result.transactionHash;
           contract.getPastEvents(
             "OrderDelivered",
             {
               filter: { transactionHash: [trxHash] },
             },
             function (error, result) {
+              console.log("ERROR",error,result)
               if (!error) {
-                console.log("result", result);
-                let orderSendDate = result[0].returnValues["timestamp"];
-                let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${orderSendDate}", deliveryDone = "${1}" WHERE id = '${id}'`;
-                conn.query(productUpdateQuery, async (err, result) => {
-                  if (err) {
-                    return res.status(200).json({
-                      msg: TextString.Order_Delivery_Failed,
-                      data: null,
-                      status: responseStatus.STATUS_NOT_FOUND,
-                    });
-                  }
-                });
+                console.log("result========", result);
+                // let real_delivey_date = result[0].returnValues["real_delivey_date"];
+                // let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
+                // conn.query(productUpdateQuery, async (err, result) => {
+                //   if (err) {
+                //     return res.status(200).json({
+                //       msg: TextString.Order_Delivery_Failed,
+                //       data: null,
+                //       status: responseStatus.STATUS_NOT_FOUND,
+                //     });
+                //   }
+                // });
 
                 return res.status(200).json({
                   msg: TextString.Order_Delivery_Successfull,
