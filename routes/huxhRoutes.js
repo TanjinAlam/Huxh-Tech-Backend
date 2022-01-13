@@ -76,6 +76,7 @@ router.post('/availableOrder', courierController.availableOrder);
 router.post('/courierOrderRequest', courierController.orderRequest);
 router.post('/processingCourerOrder', courierController.processingCourerOrder);
 router.post('/verifyPhotoCourier', courierController.verifyPhotoCourier);
+router.post('/deliveryOrder', courierController.deliveryOrder);
 
 
 
