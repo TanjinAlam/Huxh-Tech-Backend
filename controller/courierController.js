@@ -231,8 +231,8 @@ const verifyPhotoCourier = async (req, res, next) => {
 
   var contractAddress = req.body.contractAddress;
   var contract = new web3.eth.Contract(minABI, contractAddress);
-  let buyerAddr = await contract.methods.buyerAddr().call();
-  console.log("buyerAddr", buyerAddr);
+  let queryOrder = await contract.methods.queryOrder(orderNo).call();
+  console.log("queryOrder", queryOrder);
 
   const privateKey = Buffer.from(walletPRIVKEY, "hex");
   const deploy = async () => {
