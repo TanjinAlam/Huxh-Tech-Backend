@@ -313,6 +313,7 @@ const deliveryOrder = async (req, res, next) => {
   const walletAddress = req.body.walletAddress;
   const invoiceNo = req.body.walletAddress;
 
+
   let trxHash;
   var id = req.body.id;
   var date_variable = new Date();
@@ -327,7 +328,7 @@ const deliveryOrder = async (req, res, next) => {
 
   var contractAddress = req.body.contractAddress;
   var contract = new web3.eth.Contract(minABI, contractAddress);
-  let buyerAddr = await contract.methods.buyerAddr().call();
+  let buyerAddr = await contract.methods.queryPhoto(req.body.orderNo).call();
   console.log("buyerAddr", buyerAddr);
 
   const privateKey = Buffer.from(walletPRIVKEY, "hex");
