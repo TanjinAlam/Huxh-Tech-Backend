@@ -342,7 +342,7 @@ const deliveryOrder = async (req, res, next) => {
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
         to: contractAddress,
-        data: contract.methods.sendOrder(invoiceNo, UnixDate).encodeABI(),
+        data: contract.methods.delivery(invoiceNo, UnixDate).encodeABI(),
       };
       // kovin 42, rinyby 4
       const tx = new Tx(txObject, { chain: 42 });
