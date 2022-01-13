@@ -266,7 +266,7 @@ const verifyPhotoCourier = async (req, res, next) => {
           },
           function (error, result) {
             if (!error) {
-              let productUpdateQuery = `UPDATE product_order_details SET photoVerifiedBySeller ="${1}" WHERE id = '${id}'`;
+              let productUpdateQuery = `UPDATE product_order_details SET photoVerifiedByCourier ="${1}" WHERE id = '${id}'`;
               conn.query(productUpdateQuery, async (err, result) => {
                 console.log("ERROR++++++++++", result);
                 if (err) {
