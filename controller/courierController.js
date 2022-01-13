@@ -331,7 +331,7 @@ const deliveryOrder = async (req, res, next) => {
 
   var contractAddress = req.body.contractAddress;
   var contract = new web3.eth.Contract(minABI, contractAddress);
-  let buyerAddr = await contract.methods.queryOrder(1).call();
+  let buyerAddr = await contract.methods.queryOrder(Number(req.body.orderNo)).call();
   let courierAddrcourierAddr = await contract.methods.courierAddr().call();
   console.log("buyerAddr", buyerAddr);
   console.log("courierAddrcourierAddr", courierAddrcourierAddr);
@@ -347,7 +347,7 @@ const deliveryOrder = async (req, res, next) => {
         nonce: web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
-        to: contractAddress,
+        // to: contractAddress,
         data: contract.methods.delivery(invoiceno, UnixDate).encodeABI(),
       };
       // kovin 42, rinyby 4
