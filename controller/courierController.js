@@ -350,7 +350,7 @@ const deliveryOrder = async (req, res, next) => {
         from: walletAddress,
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
-        value: web3.utils.toHex(web3.utils.toWei(amount, "wei")),
+        value: web3.utils.toWei(amount, "wei"),
         to: ownerAddress,
         data: contract.methods.delivery(invoiceno, UnixDate).encodeABI(),
       };
