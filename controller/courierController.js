@@ -181,14 +181,14 @@ const orderRequest = async (req, res, next) => {
 
 const processingCourerOrder = async (req, res, next) => {
   let userId = req.body.userId;
-  const numberCheckingQry = `SELECT product_order_details.* , deplyed_product.contractAddress ,buy_user_info.walletAddress , seller_product.name,seller_product.price,seller_product.img,courier_request.userId as courierId,courier_request.assigned
+  const numberCheckingQry = `SELECT product_order_details.* , deplyed_product.contractAddress ,buy_user_info.walletAddress as sellerWalletAddress,buy_user_info.walletKey as sellerWalletKey, seller_product.name,seller_product.price,seller_product.img,courier_request.userId as courierId,courier_request.assigned
       FROM product_order_details
       JOIN seller_product
       ON product_order_details.productId = seller_product.id
-      JOIN buy_user_info
-      ON product_order_details.userId = buy_user_info.id
       JOIN deplyed_product
       ON product_order_details.deployedId = deplyed_product.id
+      JOIN buy_user_info
+      ON deplyed_product.userId = buy_user_info.id
       JOIN courier_request
       ON product_order_details.courierId = courier_request.id
       WHERE courier_request.userId = '${userId}' and courier_request.assigned IS NOT NULL`;
@@ -311,7 +311,9 @@ const deliveryOrder = async (req, res, next) => {
   //who want to send order their pass and walletaddr
   const walletPRIVKEY = req.body.privateKey;
   const walletAddress = req.body.walletAddress;
-  const invoiceno = req.body.walletAddress;
+  const invoiceno = req.body.invoiceNo;
+  const amount = req.body.amount;
+  const ownerAddress = req.body.ownerAddress;
 
 
   let trxHash;
@@ -345,10 +347,11 @@ const deliveryOrder = async (req, res, next) => {
 
       const txObject = {
         nonce: web3.utils.toHex(txCount),
+        from:ownerAddress,
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
-        // value: web3.utils.toHex(web3.utils.toWei("246", "wei")),
-        // to: contractAddress,
+        value: web3.utils.toHex(web3.utils.toWei(amount, "wei")),
+        to: walletAddress,
         data: contract.methods.delivery(invoiceno, UnixDate).encodeABI(),
       };
       // kovin 42, rinyby 4
@@ -362,46 +365,69 @@ const deliveryOrder = async (req, res, next) => {
         .then(function (result) {
           console.log("asdasdsa",result)
           trxHash = result.transactionHash;
-          contract.getPastEvents(
-            "OrderDelivered",
-            {
-              filter: { transactionHash: [trxHash] },
-            },
-            function (error, result) {
-              console.log("ERROR",error,result)
-              return res.status(200).json({
-                msg: TextString.Order_Delivery_Successfull,
-                data: null,
-                status: responseStatus.STATUS_OK,
+          if(result){
+            // let real_delivey_date = result[0].returnValues["real_delivey_date"];
+              let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${UnixDate}", deliveryDone = "${1}" WHERE id = '${id}'`;
+              conn.query(productUpdateQuery, async (err, result) => {
+                if (err) {
+                  return res.status(200).json({
+                    msg: TextString.Order_Delivery_Failed,
+                    data: null,
+                    status: responseStatus.STATUS_NOT_FOUND,
+                  });
+                }
               });
-              // if (!error) {
-              //   console.log("result========", result);
-              //   let real_delivey_date = result[0].returnValues["real_delivey_date"];
-              //   let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
-              //   conn.query(productUpdateQuery, async (err, result) => {
-              //     if (err) {
-              //       return res.status(200).json({
-              //         msg: TextString.Order_Delivery_Failed,
-              //         data: null,
-              //         status: responseStatus.STATUS_NOT_FOUND,
-              //       });
-              //     }
-              //   });
+              
+            return res.status(200).json({
+              msg: TextString.Order_Delivery_Successfull,
+              data: null,
+              status: responseStatus.STATUS_OK,
+            });
+          }
+          else{
+            return res.status(200).json({
+              msg: TextString.Order_Delivery_Failed,
+              data: null,
+              status: responseStatus.STATUS_NOT_FOUND,
+            });
+          }
+          // contract.getPastEvents(
+          //   "OrderDelivered",
+          //   {
+          //     filter: { transactionHash: [trxHash] },
+          //   },
+          //   function (error, result) {
+          //     console.log("ERROR",error,result)
 
-              //   return res.status(200).json({
-              //     msg: TextString.Order_Delivery_Successfull,
-              //     data: null,
-              //     status: responseStatus.STATUS_OK,
-              //   });
-              // } else {
-              //   return res.status(200).json({
-              //     msg: TextString.Order_Delivery_Failed,
-              //     data: null,
-              //     status: responseStatus.STATUS_NOT_FOUND,
-              //   });
-              // }
-            }
-          );
+              
+          //     // if (!error) {
+          //     //   console.log("result========", result);
+          //     //   let real_delivey_date = result[0].returnValues["real_delivey_date"];
+          //     //   let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
+          //     //   conn.query(productUpdateQuery, async (err, result) => {
+          //     //     if (err) {
+          //     //       return res.status(200).json({
+          //     //         msg: TextString.Order_Delivery_Failed,
+          //     //         data: null,
+          //     //         status: responseStatus.STATUS_NOT_FOUND,
+          //     //       });
+          //     //     }
+          //     //   });
+
+          //     //   return res.status(200).json({
+          //     //     msg: TextString.Order_Delivery_Successfull,
+          //     //     data: null,
+          //     //     status: responseStatus.STATUS_OK,
+          //     //   });
+          //     // } else {
+          //     //   return res.status(200).json({
+          //     //     msg: TextString.Order_Delivery_Failed,
+          //     //     data: null,
+          //     //     status: responseStatus.STATUS_NOT_FOUND,
+          //     //   });
+          //     // }
+          //   }
+          // );
         });
     } catch (error) {
       console.log("ERROR", error);
@@ -414,6 +440,149 @@ const deliveryOrder = async (req, res, next) => {
   };
   deploy();
 };
+
+
+// // delivery order to the user call the delivery function
+// const deliveryOrder = async (req, res, next) => {
+//   console.log("REQ BOY===", req.body);
+//   let output = { status: null, data: null, msg: null };
+//   //who want to send order their pass and walletaddr
+//   const walletPRIVKEY = req.body.privateKey;
+//   const walletAddress = req.body.walletAddress;
+//   const invoiceno = req.body.invoiceNo;
+
+
+//   let trxHash;
+//   var id = req.body.id;
+//   var date_variable = new Date();
+//   var year = date_variable.getFullYear();
+//   var month = date_variable.getMonth() + 1;
+//   var day = date_variable.getDate();
+//   let date = year + "-" + month + "-" + day;
+
+//   const UnixDate = new Date(date).getTime() / 1000;
+
+
+//   console.log("UnixDate",UnixDate)
+
+//   var minABI = HuxtTechDealABI;
+
+//   var contractAddress = req.body.contractAddress;
+//   var contract = new web3.eth.Contract(minABI, contractAddress);
+//   let buyerAddr = await contract.methods.queryOrder(Number(req.body.orderNo)).call();
+  
+//   // let courierAddrcourierAddr = await contract.methods.courierAddr().call();
+//   let check = await contract.methods.delivery(invoiceno, UnixDate).send({
+//     from: contractAddress,
+//     gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
+//         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
+//    })
+//   console.log("check===========",check)
+//   console.log("buyerAddr", buyerAddr);
+//   // console.log("courierAddrcourierAddr", courierAddrcourierAddr);
+
+//   const privateKey = Buffer.from(walletPRIVKEY, "hex");
+//   const deploy = async () => {
+//     try {
+//       const txCount = await web3.eth.getTransactionCount(walletAddress);
+
+//       console.log("ASdasdas", txCount);
+
+//       const txObject = {
+//         nonce: web3.utils.toHex(txCount),
+//         from:ownerAddress,
+//         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
+//         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
+//         value: web3.utils.toHex(web3.utils.toWei(amount, "wei")),
+//         to: walletAddress,
+//         data: contract.methods.delivery(invoiceno, UnixDate).encodeABI(),
+//       };
+//       // kovin 42, rinyby 4
+//       const tx = new Tx(txObject, { chain: 42 });
+//       tx.sign(privateKey);
+
+//       const serializedTx = tx.serialize();
+//       const raw = "0x" + serializedTx.toString("hex");
+//       await web3.eth
+//         .sendSignedTransaction(raw)
+//         .then(function (result) {
+//           console.log("asdasdsa",result)
+//           trxHash = result.transactionHash;
+//           if(result){
+//             // let real_delivey_date = result[0].returnValues["real_delivey_date"];
+//               let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${UnixDate}", deliveryDone = "${1}" WHERE id = '${id}'`;
+//               conn.query(productUpdateQuery, async (err, result) => {
+//                 if (err) {
+//                   return res.status(200).json({
+//                     msg: TextString.Order_Delivery_Failed,
+//                     data: null,
+//                     status: responseStatus.STATUS_NOT_FOUND,
+//                   });
+//                 }
+//               });
+              
+//             return res.status(200).json({
+//               msg: TextString.Order_Delivery_Successfull,
+//               data: null,
+//               status: responseStatus.STATUS_OK,
+//             });
+//           }
+//           else{
+//             return res.status(200).json({
+//               msg: TextString.Order_Delivery_Failed,
+//               data: null,
+//               status: responseStatus.STATUS_NOT_FOUND,
+//             });
+//           }
+//           // contract.getPastEvents(
+//           //   "OrderDelivered",
+//           //   {
+//           //     filter: { transactionHash: [trxHash] },
+//           //   },
+//           //   function (error, result) {
+//           //     console.log("ERROR",error,result)
+
+              
+//           //     // if (!error) {
+//           //     //   console.log("result========", result);
+//           //     //   let real_delivey_date = result[0].returnValues["real_delivey_date"];
+//           //     //   let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
+//           //     //   conn.query(productUpdateQuery, async (err, result) => {
+//           //     //     if (err) {
+//           //     //       return res.status(200).json({
+//           //     //         msg: TextString.Order_Delivery_Failed,
+//           //     //         data: null,
+//           //     //         status: responseStatus.STATUS_NOT_FOUND,
+//           //     //       });
+//           //     //     }
+//           //     //   });
+
+//           //     //   return res.status(200).json({
+//           //     //     msg: TextString.Order_Delivery_Successfull,
+//           //     //     data: null,
+//           //     //     status: responseStatus.STATUS_OK,
+//           //     //   });
+//           //     // } else {
+//           //     //   return res.status(200).json({
+//           //     //     msg: TextString.Order_Delivery_Failed,
+//           //     //     data: null,
+//           //     //     status: responseStatus.STATUS_NOT_FOUND,
+//           //     //   });
+//           //     // }
+//           //   }
+//           // );
+//         });
+//     } catch (error) {
+//       console.log("ERROR", error);
+//       return res.status(200).json({
+//         msg: TextString.Order_Delivery_Failed,
+//         data: null,
+//         status: responseStatus.STATUS_NOT_FOUND,
+//       });
+//     }
+//   };
+//   // deploy();
+// };
 
 
 const registration = async (req, res, next) => {
