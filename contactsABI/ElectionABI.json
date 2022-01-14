@@ -1,295 +1,7 @@
 [
 	{
-		"constant": true,
 		"inputs": [],
-		"name": "courierAddr",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "invoiceno",
-				"type": "uint256"
-			}
-		],
-		"name": "getInvoice",
-		"outputs": [
-			{
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"name": "orderno",
-				"type": "uint256"
-			},
-			{
-				"name": "delivery_date",
-				"type": "uint256"
-			},
-			{
-				"name": "courier",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "invoiceno",
-				"type": "uint256"
-			},
-			{
-				"name": "timestamp",
-				"type": "uint256"
-			}
-		],
-		"name": "delivery",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "health",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "number",
-				"type": "uint256"
-			}
-		],
-		"name": "queryPhoto",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "buyerAddr",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "orderno",
-				"type": "uint256"
-			},
-			{
-				"name": "ptype",
-				"type": "int8"
-			}
-		],
-		"name": "SendPhotoVerification",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "orderno",
-				"type": "uint256"
-			},
-			{
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"name": "ttype",
-				"type": "int8"
-			}
-		],
-		"name": "sendPrice",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "number",
-				"type": "uint256"
-			}
-		],
-		"name": "queryOrder",
-		"outputs": [
-			{
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"name": "goods",
-				"type": "string"
-			},
-			{
-				"name": "quantity",
-				"type": "uint256"
-			},
-			{
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"name": "safepay",
-				"type": "uint256"
-			},
-			{
-				"name": "delivery_price",
-				"type": "uint256"
-			},
-			{
-				"name": "delivey_safepay",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "orderno",
-				"type": "uint256"
-			},
-			{
-				"name": "delivery_date",
-				"type": "uint256"
-			},
-			{
-				"name": "courier",
-				"type": "address"
-			}
-		],
-		"name": "sendInvoice",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "goods",
-				"type": "string"
-			},
-			{
-				"name": "quantity",
-				"type": "uint256"
-			},
-			{
-				"name": "photoURL",
-				"type": "string"
-			},
-			{
-				"name": "videoURL",
-				"type": "string"
-			}
-		],
-		"name": "sendOrder",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_buyer",
-				"type": "address"
-			}
-		],
-		"name": "updateBuyer",
-		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "orderno",
-				"type": "uint256"
-			}
-		],
-		"name": "sendSafepay",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"payable": true,
-		"stateMutability": "payable",
 		"type": "constructor"
 	},
 	{
@@ -297,11 +9,13 @@
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "buyer",
 				"type": "address"
 			},
 			{
 				"indexed": false,
+				"internalType": "string",
 				"name": "name",
 				"type": "string"
 			}
@@ -314,107 +28,31 @@
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "buyer",
 				"type": "address"
 			},
 			{
 				"indexed": false,
-				"name": "goods",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "quantity",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "orderno",
-				"type": "uint256"
-			}
-		],
-		"name": "OrderSent",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "orderno",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "ttype",
-				"type": "int8"
-			}
-		],
-		"name": "PriceSent",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "orderno",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "value",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "now",
-				"type": "uint256"
-			}
-		],
-		"name": "SafepaySent",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
+				"internalType": "uint256",
 				"name": "invoiceno",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
 				"name": "orderno",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
 				"name": "delivery_date",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "courier",
 				"type": "address"
 			}
@@ -427,26 +65,31 @@
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "buyer",
 				"type": "address"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
 				"name": "invoiceno",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
 				"name": "orderno",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "uint256",
 				"name": "real_delivey_date",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "address",
 				"name": "courier",
 				"type": "address"
 			}
@@ -459,26 +102,418 @@
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "address",
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "goods",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			}
+		],
+		"name": "OrderSent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
 				"name": "orderno",
 				"type": "uint256"
 			},
 			{
 				"indexed": false,
+				"internalType": "string",
 				"name": "photoURL",
 				"type": "string"
 			},
 			{
 				"indexed": false,
+				"internalType": "bool",
 				"name": "isPhotoVerified",
 				"type": "bool"
 			},
 			{
 				"indexed": false,
+				"internalType": "bool",
 				"name": "isVideoVerified",
 				"type": "bool"
 			}
 		],
 		"name": "PhotoVerified",
 		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "int8",
+				"name": "ttype",
+				"type": "int8"
+			}
+		],
+		"name": "PriceSent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "now",
+				"type": "uint256"
+			}
+		],
+		"name": "SafepaySent",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int8",
+				"name": "ptype",
+				"type": "int8"
+			}
+		],
+		"name": "SendPhotoVerification",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "buyerAddr",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "courierAddr",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "invoiceno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
+			}
+		],
+		"name": "delivery",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "invoiceno",
+				"type": "uint256"
+			}
+		],
+		"name": "getInvoice",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "delivery_date",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "courier",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "health",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "queryOrder",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "buyer",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "goods",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "safepay",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "delivery_price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "delivey_safepay",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "queryPhoto",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "delivery_date",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "courier",
+				"type": "address"
+			}
+		],
+		"name": "sendInvoice",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "goods",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "photoURL",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "videoURL",
+				"type": "string"
+			}
+		],
+		"name": "sendOrder",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int8",
+				"name": "ttype",
+				"type": "int8"
+			}
+		],
+		"name": "sendPrice",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "orderno",
+				"type": "uint256"
+			}
+		],
+		"name": "sendSafepay",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_buyer",
+				"type": "address"
+			}
+		],
+		"name": "updateBuyer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	}
 ]

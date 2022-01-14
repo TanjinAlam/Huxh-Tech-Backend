@@ -370,17 +370,17 @@ const deliveryOrder = async (req, res, next) => {
               console.log("ERROR",error,result)
               if (!error) {
                 console.log("result========", result);
-                // let real_delivey_date = result[0].returnValues["real_delivey_date"];
-                // let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
-                // conn.query(productUpdateQuery, async (err, result) => {
-                //   if (err) {
-                //     return res.status(200).json({
-                //       msg: TextString.Order_Delivery_Failed,
-                //       data: null,
-                //       status: responseStatus.STATUS_NOT_FOUND,
-                //     });
-                //   }
-                // });
+                let real_delivey_date = result[0].returnValues["real_delivey_date"];
+                let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
+                conn.query(productUpdateQuery, async (err, result) => {
+                  if (err) {
+                    return res.status(200).json({
+                      msg: TextString.Order_Delivery_Failed,
+                      data: null,
+                      status: responseStatus.STATUS_NOT_FOUND,
+                    });
+                  }
+                });
 
                 return res.status(200).json({
                   msg: TextString.Order_Delivery_Successfull,
