@@ -30,6 +30,7 @@ router.post('/orderRequest', userController.orderRequest);
 router.post('/sendOrder', userController.sendOrder);
 router.post('/acceptedOrder', userController.acceptedOrder);
 router.post('/safePayment', userController.safePayment);
+router.post('/verifyPhotoUser', userController.verifyPhotoUser);
 
 /**
  * load controllers

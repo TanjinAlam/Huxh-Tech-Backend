@@ -434,6 +434,95 @@ const safePayment = async (req, res, next) => {
   deploy();
 };
 
+//verify photo of the order by seller
+const verifyPhotoUser = async (req, res, next) => {
+  console.log("REQ BOY===", req.body);
+  //who want to send order their pass and walletaddr
+  const walletPRIVKEY = req.body.privateKey;
+  const walletAddress = req.body.walletAddress;
+  const orderNo = req.body.orderNo;
+  const id = req.body.id;
+  const ptype = 1;
+  // console.log("web3.utils.toWei(value)", web3.utils.toWei(Amount, "wei"));
+  // console.log("web3.utils.toWei(value)",web3.utils.toWei(Amount,'gwei'))
+
+  var minABI = HuxtTechDealABI;
+
+  var contractAddress = req.body.contractAddress;
+  var contract = new web3.eth.Contract(minABI, contractAddress);
+  let queryOrder = await contract.methods.queryOrder(orderNo).call();
+  console.log("queryOrder", queryOrder);
+
+  const privateKey = Buffer.from(walletPRIVKEY, "hex");
+  const deploy = async () => {
+    try {
+      const txCount = await web3.eth.getTransactionCount(walletAddress);
+
+      console.log("ASdasdas", txCount);
+
+      const txObject = {
+        nonce: web3.utils.toHex(txCount),
+        from: walletAddress,
+        gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
+        gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
+        to: contractAddress,
+        data: contract.methods
+          .SendPhotoVerification(orderNo, ptype)
+          .encodeABI(),
+      };
+      // kovin 42, rinyby 4
+      const tx = new Tx(txObject, { chain: 42 });
+      tx.sign(privateKey);
+
+      const serializedTx = tx.serialize();
+      const raw = "0x" + serializedTx.toString("hex");
+      await web3.eth.sendSignedTransaction(raw).then(function (OrderSent) {
+        trxHash = OrderSent.transactionHash;
+        contract.getPastEvents(
+          "PhotoVerified",
+          {
+            filter: { transactionHash: [trxHash] },
+          },
+          function (error, result) {
+            if (!error) {
+              let productUpdateQuery = `UPDATE product_order_details SET photoVerifiedByUser ="${1}" WHERE id = '${id}'`;
+              conn.query(productUpdateQuery, async (err, result) => {
+                console.log("ERROR++++++++++", result);
+                if (err) {
+                  return res.status(200).json({
+                    msg: TextString.Photo_Verified_Failed,
+                    data: null,
+                    status: responseStatus.STATUS_NOT_FOUND,
+                  });
+                }
+              });
+              return res.status(200).json({
+                msg: TextString.Photo_Verified_Successful,
+                data: null,
+                status: responseStatus.STATUS_OK,
+              });
+            } else {
+              return res.status(200).json({
+                msg: TextString.Photo_Verified_Failed,
+                data: null,
+                status: responseStatus.STATUS_NOT_FOUND,
+              });
+            }
+          }
+        );
+      });
+    } catch (error) {
+      console.log("EOR", error);
+      return res.status(200).json({
+        msg: TextString.Photo_Verified_Failed,
+        data: null,
+        status: responseStatus.STATUS_NOT_FOUND,
+      });
+    }
+  };
+  deploy();
+};
+
 module.exports = {
   signUp,
   login,
@@ -442,4 +531,5 @@ module.exports = {
   orderRequest,
   sendOrder,
   safePayment,
+  verifyPhotoUser
 };

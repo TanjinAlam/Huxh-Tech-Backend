@@ -347,6 +347,7 @@ const deliveryOrder = async (req, res, next) => {
         nonce: web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(4700000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei("15", "gwei")),
+        // value: web3.utils.toHex(web3.utils.toWei("246", "wei")),
         // to: contractAddress,
         data: contract.methods.delivery(invoiceno, UnixDate).encodeABI(),
       };
@@ -368,32 +369,37 @@ const deliveryOrder = async (req, res, next) => {
             },
             function (error, result) {
               console.log("ERROR",error,result)
-              if (!error) {
-                console.log("result========", result);
-                let real_delivey_date = result[0].returnValues["real_delivey_date"];
-                let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
-                conn.query(productUpdateQuery, async (err, result) => {
-                  if (err) {
-                    return res.status(200).json({
-                      msg: TextString.Order_Delivery_Failed,
-                      data: null,
-                      status: responseStatus.STATUS_NOT_FOUND,
-                    });
-                  }
-                });
+              return res.status(200).json({
+                msg: TextString.Order_Delivery_Successfull,
+                data: null,
+                status: responseStatus.STATUS_OK,
+              });
+              // if (!error) {
+              //   console.log("result========", result);
+              //   let real_delivey_date = result[0].returnValues["real_delivey_date"];
+              //   let productUpdateQuery = `UPDATE product_order_details SET orderSendDate ="${real_delivey_date}", deliveryDone = "${1}" WHERE id = '${id}'`;
+              //   conn.query(productUpdateQuery, async (err, result) => {
+              //     if (err) {
+              //       return res.status(200).json({
+              //         msg: TextString.Order_Delivery_Failed,
+              //         data: null,
+              //         status: responseStatus.STATUS_NOT_FOUND,
+              //       });
+              //     }
+              //   });
 
-                return res.status(200).json({
-                  msg: TextString.Order_Delivery_Successfull,
-                  data: null,
-                  status: responseStatus.STATUS_OK,
-                });
-              } else {
-                return res.status(200).json({
-                  msg: TextString.Order_Delivery_Failed,
-                  data: null,
-                  status: responseStatus.STATUS_NOT_FOUND,
-                });
-              }
+              //   return res.status(200).json({
+              //     msg: TextString.Order_Delivery_Successfull,
+              //     data: null,
+              //     status: responseStatus.STATUS_OK,
+              //   });
+              // } else {
+              //   return res.status(200).json({
+              //     msg: TextString.Order_Delivery_Failed,
+              //     data: null,
+              //     status: responseStatus.STATUS_NOT_FOUND,
+              //   });
+              // }
             }
           );
         });
